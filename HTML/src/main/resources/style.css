@@ -1,0 +1,19 @@
+/* Definir Estilos */
+body{
+background-color: black;
+color: white;
+}
+/* Estilos Link */
+a{
+color: hotpink:
+}
+a:hover{
+color: yellow;
+}
+/* selectores */
+.center-text{
+text-align: center;
+}
+.title{
+font-size: 800%
+}
