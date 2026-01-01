@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.util.List;
 
-@Component
+//@Component
 public class ZoneFitForm extends JFrame {
 
     private JPanel mainPanel;
