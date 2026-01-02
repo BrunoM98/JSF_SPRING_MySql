@@ -57,15 +57,33 @@ public class IndexController {
             this.clients.add(this.selectedClient);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Save a Client in Data Base"));
+        }else{
+//            modificamos el cliente
+            this.clientService.saveClient(this.selectedClient);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Updated Client"));
         }
 //        Ocultamos la ventana modal
         PrimeFaces.current().executeScript("PF('windowModalClient').hide()");
 //        actualizamos la ventana usando ajax
-        PrimeFaces.current().ajax().update("form-clients:massage",
+        PrimeFaces.current().ajax().update("form-clients:message",
                 "form-clients:clients-table");
-//        Restarteamos selectedClient
+//        Restarteamos selectedClient a nulo
         this.selectedClient = null;
 
+    }
+    public void deleteClient(){
+        logger.info("Eliminated Client" + this.selectedClient);
+        this.clientService.deleteClient(this.selectedClient);
+//      Eliminar el registro de la lista de clientes
+        this.clients.remove(this.selectedClient);
+//        reseteamos el valor de selectedClient
+        this.selectedClient = null;
+//        se actualiza la tala con el registro eliminado y se envia mensaje
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage("Delete Client"));
+        PrimeFaces.current().ajax().update("form-clients:message",
+                "form-clients:clients-table");
     }
 }
 

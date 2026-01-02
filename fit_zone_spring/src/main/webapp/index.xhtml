@@ -60,6 +60,30 @@
                         <p:column headerText="Membership">
                             <h:outputText value="#{client.member}"/>
                         </p:column>
+                        <p:column>
+                            <!--creacion de boton de editar cargando en la variable windowModalClient-->
+                            <p:commandButton value="Edit" icon="pi pi-pencil"
+                                             update="form-modal:window-client"
+                                             process="@this"
+                                             oncomplete="PF('windowModalClient').show()"
+                                             class="ui-button-primary"
+                                             style="margin-right: 5rem">
+                                <!--hacemos un set del objeto que estamos procesando hacia nuestra variable selectedClient                                -->
+                                <f:setPropertyActionListener
+                                        value="#{client}"
+                                        target="#{indexController.selectedClient}"/>
+                                <!--reseteamos cualquier info que tenga modal-->
+                                <p:resetInput target="form-modal:window-client"/>
+                            </p:commandButton>
+                            <p:commandButton value="Delete" class="ui-button-danger"
+                                             icon="pi pi-trash"
+                                             process="@this"
+                                             oncomplete="PF('deleteWindowClient').show()">
+                                <f:setPropertyActionListener
+                                    value="#{client}"
+                                    target="#{indexController.selectedClient}"/>
+                            </p:commandButton>
+                        </p:column>
                     </p:dataTable>
                 </div>
             </h:form>
@@ -67,7 +91,7 @@
                 <p:dialog headerText="Clients Details" showEffect="fade"
                           modal="true" widgetVar="windowModalClient"
                           responsive="true">
-                    <p:outputPanel id="window-client" clkass="ui-fluid">
+                    <p:outputPanel id="window-client" class="ui-fluid">
                         <div class="field col-4">
                             <p:outputLabel for="name">Name</p:outputLabel>
                             <p:inputText id="name"
@@ -95,7 +119,7 @@
                     </p:outputPanel>
                     <f:facet name="footer">
                         <!-- se procesan los valores atravez de this y se crea el boton y el icono se guardar -->
-                        <p:commandButton value="Save" icon="pi pi-chek"
+                        <p:commandButton value="Save" icon="pi pi-check"
                                          process="window-client @this"
                                          actionListener="#{indexController.saveClient}"/>
                         <p:commandButton value="Exit" icon="pi pi-times"
@@ -103,6 +127,19 @@
                                          class="ui-button-secondary" type="button"/>
                     </f:facet>
                 </p:dialog>
+                <p:confirmDialog widgetVar="deleteWindowClient"
+                                 showEffect="fade" width="300"
+                                 message="Delete the Client?"
+                                 header="Confirm" severity="warn">
+                    <p:commandButton value="yes" icon="pi pi-check"
+                                    process="@this"
+                                    actionListener="#{indexController.deleteClient}"
+                                    oncomplete="PF('deleteWindowClient').hide()"/>
+                    <p:commandButton value="no" type="button"
+                                     styleClass="ui-button-secondary"
+                                     icon="pi pi-times"
+                                     onclick="PF('deleteWindowClient').hide()"/>
+                </p:confirmDialog>
             </h:form>
         </div>
     </h:body>
