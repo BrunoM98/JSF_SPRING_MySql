@@ -1,19 +1,110 @@
 <!DOCTYPE html>
-
 <h:html xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title> Fit Zone (GYM) </title>
-        <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
+        <title>Fit Zone Gym</title>
+        <link rel="stylesheet"
+              href="https://unpkg.com/primeflex@3.3.1/primeflex.min.css"/>
     </h:head>
 
     <h:body>
-        <div class="flex justify-content-center flex-wrap card-container yellow-container">
-            <h3> Fir Zone Gym</h3>
+        <div class="card">
+            <h:form id="form-clients">
+                <p:growl id="message" showDetails="true"/>
+                <div class="card">
+                    <p:menubar>
+                        <!--Creacion de boton init data table y llamada al controlador y funcion-->
+                        <p:menuitem value="Init" icon="pi pi-fw pi-user"
+                                    update="form-clients:clients-table"
+                                    actionListener="#{indexController.chargueData}"/>
+                        <!--Creacion boton cliente nuevo se llama al metodo gurdar cliente se actualiza
+                            el componente cliente ventana y se muestra la variable           -->
+                        <p:menuitem value="New Client" icon="pi pi-fw pi-plus"
+                                    actionListener="#{indexController.chargueClient}"
+                                    update=":form-modal:window-client"
+                                    oncomplete="PF('windowModalClient').show()"/>
+                    </p:menubar>
+                </div>
+                <!--Data Table-->
+                <div class="card">
+                    <!--Recuperamos Listado de clientes-->
+                    <p:dataTable value="#{indexController.clients}" var="client"
+                                 id="clients-table" widgetVar="clientsTable">
+                        <f:facet name="header">
+                            <!--creacion de carta presentacion-->
+                            <div class="flex justify-content-center">
+                                <div class="flex align-items-center justify-content-center
+                                w-20rem h-4rem
+                                bg-yellow-500
+                                font-bold text-gray-900
+                                border-round m-4">
+                                    <h3>Fit Zone Gym</h3>
+                                </div>
+                            </div>
+                        </f:facet>
+                        <!--Desplegamos el Id del clinte y accedemos al mismo -->
+                        <p:column headerText="Id">
+                            <h:outputText value="#{client.idclient}"/>
+                        </p:column>
+                        <!--Desplegamos y usamos el nombre-->
+                        <p:column headerText="Name">
+                            <h:outputText value="#{client.name}"/>
+                        </p:column>
+                        <!--        Desplegamos y usamos el apellido-->
+                        <p:column headerText="SurName">
+                            <h:outputText value="#{client.surname}"/>
+                        </p:column>
+                        <!--Desplegamos y usamos la membresia-->
+                        <p:column headerText="Membership">
+                            <h:outputText value="#{client.member}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+            <h:form id="form-modal">
+                <p:dialog headerText="Clients Details" showEffect="fade"
+                          modal="true" widgetVar="windowModalClient"
+                          responsive="true">
+                    <p:outputPanel id="window-client" clkass="ui-fluid">
+                        <div class="field col-4">
+                            <p:outputLabel for="name">Name</p:outputLabel>
+                            <p:inputText id="name"
+                                         value="#{indexController.selectedClient.name}"
+                                         required="true"
+                                         class="w-full">
+                            </p:inputText>
+                        </div>
+                        <div class="field col-4">
+                            <p:outputLabel for="surname">Surname</p:outputLabel>
+                            <p:inputText id="surname"
+                                         value="#{indexController.selectedClient.surname}"
+                                         required="true"
+                                         class="w-full">
+                            </p:inputText>
+                        </div>
+                        <div class="field col-4">
+                            <p:outputLabel for="member">Membership</p:outputLabel>
+                            <p:inputNumber id="member"
+                                           value="#{indexController.selectedClient.member}"
+                                           required="true"
+                                           class="w-full">
+                            </p:inputNumber>
+                        </div>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <!-- se procesan los valores atravez de this y se crea el boton y el icono se guardar -->
+                        <p:commandButton value="Save" icon="pi pi-chek"
+                                         process="window-client @this"
+                                         actionListener="#{indexController.saveClient}"/>
+                        <p:commandButton value="Exit" icon="pi pi-times"
+                                         onclick="PF('windowModalClient').hide()"
+                                         class="ui-button-secondary" type="button"/>
+                    </f:facet>
+                </p:dialog>
+            </h:form>
         </div>
-
     </h:body>
 
 </h:html>
